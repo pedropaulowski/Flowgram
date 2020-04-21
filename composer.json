@@ -1,0 +1,14 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Classes\\": "Classes\\",
+            "Interfaces\\": "Interfaces\\",
+            "Dao\\": "Dao\\",
+            "Flowgram\\": "socket\\"
+
+        }
+    },
+    "require": {
+        "cboden/ratchet": "^0.4.2"
+    }
+}
