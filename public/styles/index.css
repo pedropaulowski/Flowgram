@@ -126,6 +126,7 @@ body{
 }
 
 .chat-info {
+    width: 80%;
     display: flex;
     flex-direction: column;
 }
@@ -157,7 +158,7 @@ body{
 
 .chat-info-bot {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     align-items: flex-start;
     height: 18px;
     margin: 3px;
@@ -165,6 +166,12 @@ body{
     color: black;
     line-height: 18px;
     opacity: 0.9;
+    padding-left: 3px;
+}
+
+.chat-info-bot a {
+    margin-right: 10px;
+
 }
 
 .header-chat {
@@ -267,6 +274,7 @@ body{
     border: 1px solid black;
     display: flex;
     flex-direction: column;
+    word-break: break-word;
 
 }
 
@@ -281,6 +289,7 @@ body{
     border: 1px solid black;
     display: flex;
     flex-direction: column;
+    word-break: break-word;
 
 }
 .message-other-text {

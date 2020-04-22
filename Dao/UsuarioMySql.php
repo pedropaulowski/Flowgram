@@ -197,6 +197,20 @@ class UsuarioMySql implements UsuarioDao {
         }
     }
 
+    public function getImgUrlById($id) {
+        $sql = "SELECT * FROM usuarios WHERE id_user = :id";
+        $sql = $this->pdo->prepare($sql);
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+
+        if($sql->rowCount() > 0) {
+            $sql = $sql->fetch(PDO::FETCH_ASSOC);
+            return $sql['img_url'];
+        } else {
+            return false;
+        }
+    }
+
     public function ficarOnline($id) {
         $sql = "UPDATE usuarios SET estado = 1 WHERE id_user = :id";
         $sql = $this->pdo->prepare($sql);

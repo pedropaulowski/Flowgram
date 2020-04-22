@@ -29,38 +29,18 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
                 <a id="buscar"class="btn-search"><i class="fas fa-search"></i></i></a>
             </div>
 
-            <div class="chats-list">
-                <div class="chat-card">
-
-                   
-                    <div id="img-username" class="chat-img-circle">
-                        <img class="img-profile" src="profiles/usuario/profile.jpg" alt="">
-                    </div>
-                    <div class="chat-info">
-                        <div class="chat-info-top">
-                            <a class="msg-username">Joca</a>
-                            <a class="msg-date">19:04</a>
-                        </div>
-                        <div class="chat-info-bot">
-                            <a class="last-user">Joca:</a>
-                            <a class="last-msg"> 
-                                Olá você me parece muito mito seu mito demais, 
-                                mais texto mais texto desnecessário para eu fazer a parada direito
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
+            <div id="chats-list" class="chats-list">
+                
             </div>
         </div>
 
         <div class="chat">
             <div class="header-chat">
-                <a class="chat-username">Joca</a>
-                <a class="username-status">Online</a>
+                <a id="chat-username" user="id_user" class="chat-username"></a>
+                <a id="username-status" class="username-status"></a>
             </div>
             <div id="content-chat" class="content-chat">
-                <div class="card-message-other">
+                <!--<div class="card-message-other">
                     <div class="message-other-text">
                         Oi, seu pãozão, que tal 
                         sairmos para tomar uma chícara de café?
@@ -83,14 +63,13 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
                     </div>
                     <div class="message-me-date">
                         20:18:15
-                        <!-- Não lida -->
+                        Não lida 
                         <a class="read"><i class="far fa-check-circle"></i></a>
-                        <!-- Lida -->
+                     Lida 
                         <a><i class="fas fa-check-circle"></i></a>
                     </div>
                 </div>
-
-
+                -->
 
             </div>
 
@@ -101,9 +80,16 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
                 </div>
             </div>
         </div>
-    </div>
+    </div>    
+    
+    <script
+    src="https://code.jquery.com/jquery-3.5.0.min.js"
+    integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+    crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="scripts/index.js"></script>
+    <script type="text/javascript" src="scripts/socket.js"></script>
+
 
 </body>
 </html>

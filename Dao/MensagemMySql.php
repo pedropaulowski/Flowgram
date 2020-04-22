@@ -13,6 +13,12 @@ class MensagemMySql implements MensagemDao {
     }
 
     public function add(\Classes\Mensagem $m) {
+        $usuarios = [
+            $m->getDestinatario(), 
+            $m->getRemetente()
+        ];
+
+
         $sql = "INSERT INTO mensagens (
             id,
             msg,
@@ -48,6 +54,9 @@ class MensagemMySql implements MensagemDao {
         $sql->bindValue(":nonce", $m->getNonce());
         $sql->execute();
 
+        if($this->existeChat($usuarios[0], $usuarios[1]) == false)
+            $this->criarChat($usuarios[0], $usuarios[1]);
+
         return true;
 
     }
@@ -70,11 +79,12 @@ class MensagemMySql implements MensagemDao {
     }
 
     public function get20PorConversaPagination($usuario1, $usuario2, $pagina) {
-        $pagina = ($pagina == 0) ?? $pagina * 25;
+        $pagina = ($pagina == 0) ? $pagina : $pagina * 25;
+        var_dump($pagina);
         
         $sql = "SELECT * FROM mensagens WHERE 
         (remetente = :usuario1 AND destinatario = :usuario2) OR
-        (remetente = :usuario2 AND destinatario = :usuario1) LIMIT $pagina,25";
+        (remetente = :usuario2 AND destinatario = :usuario1) ORDER BY hora DESC LIMIT $pagina,25";
         $sql = $this->pdo->prepare($sql);
         $sql->bindValue(":usuario1", $usuario1);
         $sql->bindValue(":usuario2", $usuario2);
@@ -207,5 +217,60 @@ class MensagemMySql implements MensagemDao {
             return false;
     }
 
+    public function getMensagemById($id){
+        $sql = "SELECT * FROM mensagens WHERE id = :id";
+        $sql = $this->pdo->prepare($sql);
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+        
+        $sql = $sql->fetch(PDO::FETCH_ASSOC);
 
+        return $sql;
+    }
+
+    public function getUserChats($id) {
+        $sql = "SELECT * FROM chats WHERE usuario1 = :id OR usuario2 = :id";
+        $sql = $this->pdo->prepare($sql);
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+        
+        if($sql->rowCount() > 0) {
+            $sql = $sql->fetchAll(PDO::FETCH_ASSOC);
+            return $sql;
+        } else {
+            return [];
+        }
+    }
+
+    public function existeChat($usuario1, $usuario2) {
+        $sql = "SELECT * FROM chats WHERE 
+        (usuario1 = :usuario1 AND usuario2 = :usuario2) 
+        OR 
+        (usuario2 = :usuario1 AND usuario1 = :usuario2)";
+        $sql = $this->pdo->prepare($sql);
+        $sql->bindValue(":usuario1", $usuario1);
+        $sql->bindValue(":usuario2", $usuario2);
+        $sql->execute();
+        
+        if($sql->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function criarChat($usuario1, $usuario2) {
+        $usuarios = [
+            $usuario1,
+            $usuario2
+        ];
+        $usuarios = sort($usuarios);
+
+        $sql = "INSERT INTO chats (usuario1, usuario2) VALUES (:usuario1, :usuario2)";
+        $sql = $this->pdo->prepare($sql);
+        $sql->bindValue(":usuario1", $usuarios[0]);
+        $sql->bindValue(":usuario2", $usuarios[1]);
+        $sql->execute();
+
+    }
 }

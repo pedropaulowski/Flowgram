@@ -18,5 +18,9 @@ interface MensagemDao {
     
     public function lerMensagem($id);
     public function mensagemFoiLida($id);
-    
+    public function getMensagemById($id);
+
+    public function getUserChats($id);
+    public function existeChat($usuario1, $usuario2);
+    public function criarChat($usuario1, $usuario2);
 }
