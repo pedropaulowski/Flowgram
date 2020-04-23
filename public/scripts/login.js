@@ -46,7 +46,7 @@ $(document).ready(function() {
         var senha = document.getElementById('senha').value 
         var chave = document.getElementById('chave_privada').value 
 
-        axios.post('http://flowgram.test/api/usuarios/', {
+        axios.post('/api/usuarios/', {
                 "acao": "entrar",
                 "username": username,
                 "senha": senha,
@@ -59,7 +59,7 @@ $(document).ready(function() {
                 localStorage.setItem('chave', chave)
                 localStorage.setItem('id', json.id)
 
-                window.location.href="http://flowgram.test/"
+                window.location.href="index.php"
             } 
           })
 

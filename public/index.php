@@ -21,7 +21,16 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
     <div class="container-flex ">
         <div class="chats">
             <div class="header">
-                <a class="btn-config"><i class="fas fa-bars"></i></a>
+                <div id="menu" class="btn-config"><i class="fas fa-bars"></i>
+                    <div id="dropdown-menu" class="dropdown-menu">
+                        <div class="menu-options">
+                            <div>Segurança</div>
+                            <div>Solicitar dados da conta</div>
+                            <div>Meu Perfil</div>
+                            <div>Sair</div>
+                        </div>
+                    </div>
+                </div>
                 <h1 class="">Flowgram</h1>
             </div>
             <div class="search-bar">
@@ -89,6 +98,7 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
 
     <script type="text/javascript" src="scripts/index.js"></script>
     <script type="text/javascript" src="scripts/socket.js"></script>
+    <script type="text/javascript" src="scripts/menu.js"></script>
 
 
 </body>

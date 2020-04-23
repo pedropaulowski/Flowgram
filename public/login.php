@@ -14,7 +14,7 @@ if(isset($_SESSION['id']) && !empty($_SESSION['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no">
-    <title>Login - MittereKrypto</title>
+    <title>Login - Flowgram</title>
     <link rel="stylesheet" href="styles/login.css">
     <link rel="stylesheet" href="fontawesome/css/all.css">
 </head>
@@ -59,7 +59,7 @@ if(isset($_SESSION['id']) && !empty($_SESSION['id'])) {
   src="https://code.jquery.com/jquery-3.5.0.min.js"
   integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
   crossorigin="anonymous"></script>
-  <script src="scripts/axios.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script type="text/javascript" src="scripts/login.js"></script>
 
 

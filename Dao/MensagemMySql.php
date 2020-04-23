@@ -53,7 +53,7 @@ class MensagemMySql implements MensagemDao {
         $sql->bindValue(":estado", $m->getEstado());
         $sql->bindValue(":nonce", $m->getNonce());
         $sql->execute();
-
+        
         if($this->existeChat($usuarios[0], $usuarios[1]) == false)
             $this->criarChat($usuarios[0], $usuarios[1]);
 
@@ -247,6 +247,7 @@ class MensagemMySql implements MensagemDao {
         (usuario1 = :usuario1 AND usuario2 = :usuario2) 
         OR 
         (usuario2 = :usuario1 AND usuario1 = :usuario2)";
+
         $sql = $this->pdo->prepare($sql);
         $sql->bindValue(":usuario1", $usuario1);
         $sql->bindValue(":usuario2", $usuario2);
@@ -261,10 +262,12 @@ class MensagemMySql implements MensagemDao {
 
     public function criarChat($usuario1, $usuario2) {
         $usuarios = [
-            $usuario1,
-            $usuario2
+            0=> $usuario1,
+            1=> $usuario2
         ];
-        $usuarios = sort($usuarios);
+        sort($usuarios);
+        var_dump($usuarios);
+
 
         $sql = "INSERT INTO chats (usuario1, usuario2) VALUES (:usuario1, :usuario2)";
         $sql = $this->pdo->prepare($sql);

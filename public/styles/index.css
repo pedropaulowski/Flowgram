@@ -155,7 +155,17 @@ body{
     -webkit-line-clamp: 2; 
     -webkit-box-orient: vertical;
 }
-
+.last-msg-new {
+    height: 20px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    font-weight: bold;
+    color: #FF0000;
+}
 .chat-info-bot {
     display: flex;
     justify-content: start;
@@ -310,4 +320,36 @@ body{
     opacity: 0.8;
     margin: 5px;
     align-self: flex-end;
+}
+
+.dropdown-menu {
+    width: 100%;
+    max-width: 270px;
+    background-color: #161616;
+    position: absolute;
+    display: none;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 3px;
+
+}
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.menu-options div {
+    width: 100%;
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 30px;
+    align-items: center;
+    line-height: 30px;
+
+}
+.menu-options div:hover {
+    background-color: black;
 }

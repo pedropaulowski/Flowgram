@@ -30,10 +30,9 @@ class Socket implements MessageComponentInterface {
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
-        $fake = $msg;
         $real_message = json_decode(json_decode($msg), true);
 
-        var_dump($msg);
+        // var_dump($msg);
         switch($real_message['action']) {
             case 'connect':
                 $hora = date("Y-m-d H:i:s");
@@ -46,7 +45,6 @@ class Socket implements MessageComponentInterface {
 
                 $chats = $this->mensagemDb->getUserChats($id);
                 $des = hex2bin($real_message['secret_key']);
-
 
 
                 foreach($chats as $chat) {
@@ -75,7 +73,7 @@ class Socket implements MessageComponentInterface {
                         $nonce,
                         $ky_destinatario_remetente,
                     );
-
+            
                     $msg_metadata['msg'] = $mensagem_descriptografada;
 
 
@@ -87,7 +85,7 @@ class Socket implements MessageComponentInterface {
                         'img_url' => $user['img_url'],
                         'last_user' => $last_user['username'],
                         'hora' => $last_msg['hora'],
-                        'last_msg' => $mensagem_descriptografada,
+                        'last_msg' => htmlspecialchars($mensagem_descriptografada, ENT_QUOTES),
                         'user_estado' => $user['estado']
                     ];
                     
@@ -186,8 +184,9 @@ class Socket implements MessageComponentInterface {
                     $nonce,
                     $ky_destinatario_remetente,
                 );
-
-                $msg_metadata['msg'] = $mensagem_descriptografada;
+                $query = $this->usuarioDb->getUserById($remetente);
+                $username = $query['username'];
+                $msg_metadata['msg'] = htmlspecialchars($mensagem_descriptografada, ENT_QUOTES);
                 $json_to_client = [
                     'action'=> 'New Message',
                     'id_message' => $id_mensagem,
@@ -196,7 +195,8 @@ class Socket implements MessageComponentInterface {
                     'from_img_url' => $from_img_url,
                     'hora' => $msg_db['hora'],
                     'estado' => 0,
-                    'privacidade' =>  $msg_db['privacidade']
+                    'privacidade' =>  $msg_db['privacidade'],
+                    'username' => $username
                 ];
                 
                 $json_to_client = json_encode(json_encode($json_to_client), true);
@@ -216,47 +216,100 @@ class Socket implements MessageComponentInterface {
 
                 $mensagens = $this->mensagemDb->get20PorConversaPagination($destinatario, $remetente, $pagina);
 
-                foreach($mensagens as $mensagem) {
-                    $msg_metadata = json_decode($mensagem['msg'], true);
-                    $msg_text= hex2bin($msg_metadata['msg']);
-                    var_dump($mensagem['hora']);
+                if(count($mensagens) > 0) {
+                    foreach($mensagens as $mensagem) {
+                        $msg_metadata = json_decode($mensagem['msg'], true);
+                        $msg_text= hex2bin($msg_metadata['msg']);
+                        // var_dump($mensagem['hora']);
 
-                    $nonce = hex2bin($mensagem['nonce']);
-                    $ky_destinatario_remetente = sodium_crypto_box_keypair_from_secretkey_and_publickey($chave_privada_destinatario, $chave_publica_remetente);
-    
-                    $mensagem_descriptografada = sodium_crypto_box_open(
-                        $msg_text,
-                        $nonce,
-                        $ky_destinatario_remetente,
-                    );
+                        $nonce = hex2bin($mensagem['nonce']);
+                        $ky_destinatario_remetente = sodium_crypto_box_keypair_from_secretkey_and_publickey($chave_privada_destinatario, $chave_publica_remetente);
+        
+                        $mensagem_descriptografada = sodium_crypto_box_open(
+                            $msg_text,
+                            $nonce,
+                            $ky_destinatario_remetente,
+                        );
 
-                    $msg_metadata['msg'] = $mensagem_descriptografada;
-                    
+                        $msg_metadata['msg'] = htmlspecialchars($mensagem_descriptografada, ENT_QUOTES);
+                        
 
 
-                    $estado_user = $this->usuarioDb->getEstado($mensagem['remetente']);
+                        $estado_user = $this->usuarioDb->getEstado($mensagem['remetente']);
 
-                    if($mensagem['remetente'] != $destinatario) {
-                        $this->mensagemDb->lerMensagem($mensagem['id']);
-                        $mensagem['estado'] = 1;   
+                        if($mensagem['remetente'] != $destinatario) {
+                            $this->mensagemDb->lerMensagem($mensagem['id']);
+                            $mensagem['estado'] = 1;   
+                        }
+
+                        $msg = [
+                            'action' => 'msgs_from_chat',
+                            'id_message' => $mensagem['id'],
+                            'msg' => htmlspecialchars($mensagem_descriptografada, ENT_QUOTES),
+                            'hora' => $mensagem['hora'],
+                            'from' => $mensagem['remetente'],
+                            'estado_message' => $mensagem['estado'],
+                            'estado_user' => $estado_user,
+                            'id_user' => $remetente
+                        ];
+
+                        $msg = json_encode(json_encode($msg), true);
+
+                        $from->send($msg);
+
+
                     }
-
+                } else {
+                    $estado_user = $this->usuarioDb->getEstado($remetente);
+                    
                     $msg = [
                         'action' => 'msgs_from_chat',
-                        'id_message' => $mensagem['id'],
-                        'msg' => $mensagem_descriptografada,
-                        'hora' => $mensagem['hora'],
-                        'from' => $mensagem['remetente'],
-                        'estado_message' => $mensagem['estado'],
-                        'estado_user' => $estado_user
+                        'id_message' => md5(date('Y-m-d H:i:s')),
+                        'msg' => 'Não há conversa ainda',
+                        'hora' => 'Do servidor',
+                        'from' => $destinatario,
+                        'estado_message' => 0,
+                        'estado_user' => $estado_user,
+                        'id_user' => $remetente
+
                     ];
 
                     $msg = json_encode(json_encode($msg), true);
 
                     $from->send($msg);
 
-
                 }
+            break;
+            case 'search_user': 
+                
+                $this->usuarioDb->ficarOnline($real_message['from']);
+
+                $user = $this->usuarioDb->getUserByUsername($real_message['user']);
+
+                if($user == false) {
+                    $msg = [
+                        'action' => 'result_user',
+                        'result' => false
+                    ];
+
+                } else {
+                    $msg = [
+                        'action' => 'result_user',
+                        'result' => true,
+                        'username' => $user['username'],
+                        'ultimo_acesso' => $user['ultimo_acesso'],
+                        'id_user' => $user['id_user'],
+                        'img_url' => $user['img_url'],
+                        'descricao' => htmlspecialchars($user['descricao'], ENT_QUOTES)
+                    ];
+                }
+
+
+                $msg = json_encode(json_encode($msg), true);
+
+
+                $from->send($msg);
+
 
             break;
         }

@@ -73,9 +73,12 @@ switch($method) {
 
         if($acao == 'entrar' && $username != false) {
             if($usuarioDb->logIn($username, $senha)) {
-                $_SESSION['id'] = $usuarioDb->getUserByUsername($username);
+                $user = $usuarioDb->getUserByUsername($username);
+                $_SESSION['id'] = $user['id_user']; 
                 $login_success_array['id'] = $_SESSION['id'];
+
                 echo json_encode($login_success_array);
+            
             } else {
                 echo json_encode($login_error_array);
             }

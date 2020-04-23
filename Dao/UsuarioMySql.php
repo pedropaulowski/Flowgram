@@ -141,7 +141,7 @@ class UsuarioMySql implements UsuarioDao {
 
         if($sql->rowCount() > 0) {
             $sql = $sql->fetch(PDO::FETCH_ASSOC);
-            return $sql['id_user'];
+            return $sql;
         } else {
             return false;
         }

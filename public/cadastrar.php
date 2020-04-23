@@ -53,7 +53,7 @@ if(isset($_SESSION['id']) && !empty($_SESSION['id'])) {
     integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
     crossorigin="anonymous"></script>
 
-    <script type="text/javascript" src="scripts/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script type="text/javascript" src="scripts/cadastrar.js"></script>
 

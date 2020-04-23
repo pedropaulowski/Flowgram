@@ -1,6 +1,7 @@
 const socket = new WebSocket("ws://192.168.1.14:8080")
 const my_id = localStorage.getItem('id')
 const secret_key = localStorage.getItem('chave')
+var aux = 0
 
 
 socket.onopen = () =>{
@@ -37,7 +38,7 @@ if(btn_send != null) {
 
             json = JSON.stringify(JSON.stringify(json))
             hora = retornaDataAtual()
-            var html = createCardMe(Math.floor(Math.random() * 1000), msg_text, hora, 0)
+            var html = createCardMe(Math.floor(Math.random() * 1000), encodeHTML(msg_text), hora, 0)
             socket.send(json)
             document.getElementById('message-text').value = ''
             $('#content-chat').append(html)
@@ -75,14 +76,85 @@ socket.onmessage = (e) => {
                 $('#content-chat').append(html_msg)
                 barra();
             } else {
-                console.log()
+                if (searchChatByUsername == true) {
+                    $(`#chat${socket_msg.username}`).remove()
+
+                    console.log($(`#chat${socket_msg.username}`))
+                    var html_chat_card = createChatCard(socket_msg.from_img_url, socket_msg.username, socket_msg.hora, socket_msg.username, socket_msg.msg.msg, 1)
+                    
+                    $('#chats-list').prepend(html_chat_card)
+
+                    $(`#chat${socket_msg.username}`).click(function() {
+
+                        var id_div = `chat${socket_msg.username}`
+                        if(document.getElementById(id_div).getAttribute('username') != document.getElementById('chat-username').innerText) {
+                            
+                            
+        
+                            var msg = {
+                                action: 'Open chat',
+                                requester: my_id,
+                                other: socket_msg.from,
+                                secret_key: secret_key,
+                                pagina: 0
+                            }
+                            document.getElementById('content-chat').innerHTML = ''
+        
+                            msg = JSON.stringify(JSON.stringify(msg))
+        
+                            socket.send(msg)
+                            
+                            document.getElementById('chat-username').innerText = socket_msg.username
+        
+                                document.getElementById('chat-username').setAttribute('id_user', socket_msg.from)
+                                $('#username-status').innerHTML = socket_msg.user_estado
+        
+        
+                            setTimeout(barra, 1000);
+                        }
+                    })
+                } else {
+                    $(`#chat${socket_msg.username}`).remove()
+                    var html_chat_card = createChatCard(socket_msg.from_img_url, socket_msg.username, socket_msg.hora, socket_msg.username, socket_msg.msg.msg, 1)
+                    $('#chats-list').prepend(html_chat_card)
+
+                    $(`#chat${socket_msg.username}`).click(function() {
+
+                        var id_div = `chat${socket_msg.username}`
+                        if(document.getElementById(id_div).getAttribute('username') != document.getElementById('chat-username').innerText) {
+                            
+                            
+        
+                            var msg = {
+                                action: 'Open chat',
+                                requester: my_id,
+                                other: socket_msg.from,
+                                secret_key: secret_key,
+                                pagina: 0
+                            }
+                            document.getElementById('content-chat').innerHTML = ''
+        
+                            msg = JSON.stringify(JSON.stringify(msg))
+        
+                            socket.send(msg)
+                            
+                            document.getElementById('chat-username').innerText = socket_msg.username
+        
+                                document.getElementById('chat-username').setAttribute('id_user', socket_msg.from)
+                                $('#username-status').innerHTML = socket_msg.user_estado
+        
+        
+                            setTimeout(barra, 1000);
+                        }
+                    })
+                }
             }
 
 
         break;
 
         case 'loadChats':
-            
+
             var html_msg = createChatCard(
                 socket_msg.img_url,
                 socket_msg.username,
@@ -97,8 +169,9 @@ socket.onmessage = (e) => {
 
                 var id_div = `chat${socket_msg.username}`
                 if(document.getElementById(id_div).getAttribute('username') != document.getElementById('chat-username').innerText) {
-                console.log(document.getElementById(id_div).getAttribute('username'), document.getElementById('chat-username').innerText);
                     
+                    
+
                     var msg = {
                         action: 'Open chat',
                         requester: my_id,
@@ -106,23 +179,88 @@ socket.onmessage = (e) => {
                         secret_key: secret_key,
                         pagina: 0
                     }
+                    document.getElementById('content-chat').innerHTML = ''
 
                     msg = JSON.stringify(JSON.stringify(msg))
 
                     socket.send(msg)
                     
                     document.getElementById('chat-username').innerText = socket_msg.username
-                    document.getElementById('chat-username').setAttribute('id_user', socket_msg.id_user)
-                    $('#username-status').innerHTML = socket_msg.user_estado
+
+                        document.getElementById('chat-username').setAttribute('id_user', socket_msg.id_user)
+                        $('#username-status').innerHTML = socket_msg.user_estado
+
+
                     setTimeout(barra, 1000);
                 }
             })
         break;
 
         case 'msgs_from_chat':
+
+            
+
             var html_card_msg = (socket_msg.from != my_id) ? createCardOther(socket_msg.id_message, socket_msg.msg, socket_msg.hora) : createCardMe(socket_msg.id_message, socket_msg.msg, socket_msg.hora, socket_msg.estado_message)
             $('#username-status').html( (socket_msg.estado_user == 0) ? 'Offline' : 'Online' )
             $('#content-chat').prepend(html_card_msg)
+
+        break;
+
+        case 'result_user':
+            var chats_list = document.getElementById('chats-list')
+            if(socket_msg.result == true) {
+                var html = createCardSearch(socket_msg.img_url, socket_msg.username, socket_msg.ultimo_acesso, socket_msg.descricao)
+                $('#chats-list').prepend(html)
+
+                $(`#result-card`).click(function() {
+                    
+                    var id_div = `result-card`
+                    if(document.getElementById(id_div).getAttribute('username') != document.getElementById('chat-username').innerText) {
+                        console.log(document.getElementById(id_div).getAttribute('username'))
+                        var msg = {
+                            action: 'Open chat',
+                            requester: my_id,
+                            other: socket_msg.id_user,
+                            secret_key: secret_key,
+                            pagina: 0
+                        }
+
+    
+                        msg = JSON.stringify(JSON.stringify(msg))
+    
+                        socket.send(msg)
+
+                        document.getElementById('content-chat').innerHTML = ''
+                        
+                        document.getElementById('chat-username').innerText = socket_msg.username
+
+                        document.getElementById('chat-username').setAttribute('id_user', socket_msg.id_user)
+                        $('#username-status').innerHTML = socket_msg.user_estado
+
+
+                        setTimeout(barra, 1000);
+                    }
+                })
+
+            } else {
+                document.getElementById('chats-list').innerHTML = ''
+                var html = `Não há usuário com esse username...`
+                chats_list.prepend(html)
+
+                setTimeout( () => {
+                    var msg = {
+                        action : "connect",
+                        id: my_id,
+                        secret_key: secret_key
+                    }
+                    msg = JSON.stringify(JSON.stringify(msg))
+                    socket.send(msg)
+    
+                    document.getElementById('chats-list').innerHTML = ''
+
+                },1000)
+
+            }
         break;
     }
 }
@@ -180,27 +318,47 @@ function createCardMe(id_message, message, hora, estado = 0) {
     }
 }
 
-function createChatCard(img_url, username, hora, last_user, last_msg) {
+function createChatCard(img_url, username, hora, last_user, last_msg, nova_msg=0) {
     
-    var chat_card = `
-    <div username="${username}"id="chat${username}" class="chat-card">
-        <div id="img-username" class="chat-img-circle">
-            <img class="img-profile" src="${img_url}" alt="">
-        </div>
-        <div class="chat-info">
-            <div class="chat-info-top">
-                <a id="username${username}"class="msg-username">${username}</a>
-                <a class="msg-date">${hora}</a>
+    if(nova_msg != 0) {
+        var chat_card = `
+        <div username="${username}"id="chat${username}" class="chat-card">
+            <div id="img-username" class="chat-img-circle">
+                <img class="img-profile" src="${img_url}" alt="">
             </div>
-            <div class="chat-info-bot">
-                <a class="last-user">${last_user}:</a>
-                <a class="last-msg"> 
-                    ${last_msg}
-                </a>
+            <div class="chat-info">
+                <div class="chat-info-top">
+                    <a id="username${username}"class="msg-username">${username}</a>
+                    <a class="msg-date">${hora}</a>
+                </div>
+                <div class="chat-info-bot">
+                    <a class="last-user">${last_user}:</a>
+                    <a class="last-msg-new"> 
+                        ${last_msg}
+                    </a>
+                </div>
             </div>
-        </div>
-
-    </div>`
+        </div>`
+    } else {
+        var chat_card = `
+        <div username="${username}"id="chat${username}" class="chat-card">
+            <div id="img-username" class="chat-img-circle">
+                <img class="img-profile" src="${img_url}" alt="">
+            </div>
+            <div class="chat-info">
+                <div class="chat-info-top">
+                    <a id="username${username}"class="msg-username">${username}</a>
+                    <a class="msg-date">${hora}</a>
+                </div>
+                <div class="chat-info-bot">
+                    <a class="last-user">${last_user}:</a>
+                    <a class="last-msg"> 
+                        ${last_msg}
+                    </a>
+                </div>
+            </div>
+        </div>`
+    }
 
 
     return chat_card;
@@ -230,8 +388,69 @@ function barra() {
   
   }
 
-  function retornaDataAtual(){
+function retornaDataAtual(){
     var dNow = new Date();
     var localdate = dNow.getDate() + '-' + (dNow.getMonth()+1) + '-' + dNow.getFullYear() + ' ' + dNow.getHours() + ':' + dNow.getMinutes()+ ':' + dNow.getSeconds();
     return localdate;
-  }
+}
+
+function createCardSearch(img_url, username, ultimo_acesso, descricao) {
+    
+    var chat_card = `
+    <div id="result-card" username="${username}"id="chat${username}" class="chat-card">
+        <div id="img-username" class="chat-img-circle">
+            <img class="img-profile" src="${img_url}" alt="">
+        </div>
+        <div class="chat-info">
+            <div class="chat-info-top">
+                <a id="username${username}"class="msg-username">${username}</a>
+                <a class="msg-date">Visto por ultimo ${ultimo_acesso}<a onclick = "$('#result-card').remove()"id="close-result"><i class="far fa-times-circle"></a></i></a>
+            </div>
+            <div class="chat-info-bot">
+                <a class="last-user">Status:</a>
+                <a class="last-msg"> 
+                    ${descricao}
+                </a>
+            </div>
+        </div>
+
+    </div>`
+
+
+    return chat_card;
+}
+
+
+  
+var btn_search = document.getElementById('buscar')
+
+if(btn_search != null) {
+    btn_search.onclick = () => {   
+        var search_text = document.getElementById('search-text').value
+        if(search_text != '') {
+            var json = {
+                action: "search_user",
+                from: my_id,
+                user: search_text 
+            }
+
+            json = JSON.stringify(JSON.stringify(json))
+            socket.send(json)
+            document.getElementById('search-text').value = ''
+        }
+    }
+}
+
+function searchChatByUsername(username) {
+    var chat = document.getElementById(`chat${username}`)
+
+    if(chat != null) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function encodeHTML(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+}
