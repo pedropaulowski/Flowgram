@@ -28,7 +28,7 @@ $(document).ready(function() {
         var username = document.getElementById('username').value
         var senha = document.getElementById('senha').value 
 
-        axios.post('/api/usuarios/', {
+        axios.post('http://flowgram-messenger.herokuapp.com/public/api/usuarios/', {
                 "acao": "cadastrar",
                 "username": username,
                 "nome": nome,

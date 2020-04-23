@@ -46,7 +46,7 @@ $(document).ready(function() {
         var senha = document.getElementById('senha').value 
         var chave = document.getElementById('chave_privada').value 
 
-        axios.post('/api/usuarios/', {
+        axios.post('http://flowgram-messenger.herokuapp.com/public/api/usuarios/', {
                 "acao": "entrar",
                 "username": username,
                 "senha": senha,
