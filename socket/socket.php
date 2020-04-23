@@ -317,6 +317,10 @@ class Socket implements MessageComponentInterface {
     }
 
     public function onClose(ConnectionInterface $conn) {
+        $key = array_search($conn, $this->clients);
+        if ($key) {
+            unset($this->clients[$key]);
+        }
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e) {
