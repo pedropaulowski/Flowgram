@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://192.168.1.14:8080")
+const socket = new WebSocket("ws://flowgram-messenger.herokuapp.com:8080")
 const my_id = localStorage.getItem('id')
 const secret_key = localStorage.getItem('chave')
 var aux = 0
