@@ -1,9 +1,9 @@
 <?php
 
-$host = '13.82.208.202';
+$host = 'localhost';
 $dbname = 'flowgram';
-$dbuser = 'root';
-$dbpwd = 'UZUMymw123j6t2hybt26';
+$dbuser = 'paulowski';
+$dbpwd = 'xr2$gpdL#jC)uQ?';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $dbuser, $dbpwd);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Flowgram;
+namespace Socket;
 
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;

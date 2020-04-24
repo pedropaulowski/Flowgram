@@ -4,7 +4,7 @@
             "Classes\\": "Classes\\",
             "Interfaces\\": "Interfaces\\",
             "Dao\\": "Dao\\",
-            "Flowgram\\": "socket\\"
+            "Socket\\": "Socket\\"
 
         }
     },
