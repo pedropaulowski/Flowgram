@@ -23,7 +23,8 @@ $c = new Criptografia;
 switch($method) {
     case 'PUT':
         $parametros = (json_decode(file_get_contents("php://input"), true));
-        echo json_encode($error_array);
+        var_dump($parametros);
+
     break;
 
     case 'DELETE':
@@ -63,7 +64,7 @@ switch($method) {
         $acao = $parametros['acao'];
 
         if($acao == 'sair') {
-            unset($_SESSION['nome']);
+            unset($_SESSION['id']);
             exit;
         }
 
@@ -133,6 +134,7 @@ switch($method) {
 
             }
         }
+
 
     break;
 

@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://192.168.1.14:8080")
+const socket = new WebSocket("ws://flowgram.test:8080")
 const my_id = localStorage.getItem('id')
 const secret_key = localStorage.getItem('chave')
 var aux = 0
@@ -106,8 +106,8 @@ socket.onmessage = (e) => {
                             
                             document.getElementById('chat-username').innerText = socket_msg.username
         
-                                document.getElementById('chat-username').setAttribute('id_user', socket_msg.from)
-                                $('#username-status').innerHTML = socket_msg.user_estado
+                            document.getElementById('chat-username').setAttribute('id_user', socket_msg.from)
+                            $('#username-status').innerHTML = socket_msg.estado_user
         
         
                             setTimeout(barra, 1000);

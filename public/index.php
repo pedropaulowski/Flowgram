@@ -15,32 +15,35 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <title>Flowgram</title>
     <link rel="stylesheet" href="styles/index.css">
-    <!-- <link rel="stylesheet" href="fontawesome/css/all.css"> -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="fontawesome/css/all.css"> 
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 </head>
 <body>
     <div class="container-flex ">
         <div class="chats">
             <div class="header">
                 <div id="menu" class="btn-config"><i class="fas fa-bars"></i>
-                    <div id="dropdown-menu" class="dropdown-menu">
-                        <div class="menu-options">
-                            <div>Segurança</div>
-                            <div>Solicitar dados da conta</div>
-                            <div>Meu Perfil</div>
-                            <div>Sair</div>
-                        </div>
-                    </div>
+
                 </div>
                 <h1 class="">Flowgram</h1>
             </div>
             <div class="search-bar">
                 <input type="text" placeholder="Buscar" id="search-text">
-                <a id="buscar"class="btn-search"><i class="fas fa-search"></i></i></a>
+                <a id="buscar"class="btn-search"><i class="fas fa-search"></i></a>
+            </div>
+
+            <div id="dropdown-menu" class="dropdown-menu">
+                <div class="menu-options">
+                    <div><a data-toggle="security" class="btn-menu"><i class="fas fa-lock"></i>Segurança</a></div>
+                    <div><a data-toggle="dados" class="btn-menu"><i class="fas fa-database"></i>Solicitar dados da conta</a></div>
+                    <div><a data-toggle="estatistica" class="btn-menu"><i class="fas fa-chart-pie"></i>Estatísticas</a></div>
+                    <div><a data-toggle="perfil" class="btn-menu"><i class="fas fa-user-alt"></i>Meu perfil</a></div>
+                    <div id="log-out"><a><i class="fas fa-sign-out-alt"></i>Sair</a></div>
+                </div>
             </div>
 
             <div id="chats-list" class="chats-list">
-                
+
             </div>
         </div>
 
@@ -50,36 +53,31 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
                 <a id="username-status" class="username-status"></a>
             </div>
             <div id="content-chat" class="content-chat">
-                <!--<div class="card-message-other">
-                    <div class="message-other-text">
-                        Oi, seu pãozão, que tal 
-                        sairmos para tomar uma chícara de café?
-                        Que tal? Que tal? Que tal? Que tal? Que tal? 
-                        Que tal? Que tal? Que tal? Que tal? Que tal?
-                        Que tal? Que tal? Que tal? Que tal? Que tal?
-                    </div>
-                    <div class="message-other-date">
-                        20:18:15
-                    </div>
-                </div>
+                <div class="profile">
+                    <form id="form-edit"method="POST" enctype="multipart/form-data">
+                        <div  class="profile-img-circle">
+                            <img id="open-img-input"class="img-my-profile" src="http://flowgram.test/profiles/usuario/profile.jpg" alt="">
+                        </div>
+                        <div class="edit-username">
+                            <input type="file" name="file" class="input-profile" id="file"/>
+                        </div>
+                        <a>Username:</a>
+                        <div class="edit-username">
+                            <input autocomplete="off" name="username" type="text" class="input-profile" value="${username}"id="username-text"/>
+                        </div>
+                        <a>Nome:</a>
+                        <div class="edit-name">
+                            <input autocomplete="off" name="name" type="text" class="input-profile"  value="${Name}"id="name-text"/>
+                        </div>
+                        <a>Recado:</a>
+                        <div class="edit-descripton">
+                            <input autocomplete="off" name="description" type="text" class="input-profile"  value="${Name}"id="description-text"/>
+                        </div>
+                        
+                        <button type="submit"id="editar"><i class="fas fa-save"></i></button>
 
-                <div class="card-message-me">
-                    <div class="message-me-text">
-                        Oi, seu pãozão, que tal 
-                        sairmos para tomar uma chícara de café?
-                        Que tal? Que tal? Que tal? Que tal? Que tal? 
-                        Que tal? Que tal? Que tal? Que tal? Que tal?
-                        Que tal? Que tal? Que tal? Que tal? Que tal?
-                    </div>
-                    <div class="message-me-date">
-                        20:18:15
-                        Não lida 
-                        <a class="read"><i class="far fa-check-circle"></i></a>
-                     Lida 
-                        <a><i class="fas fa-check-circle"></i></a>
-                    </div>
+                    </form>
                 </div>
-                -->
 
             </div>
 
@@ -88,6 +86,7 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
                     <textarea type="text" placeholder="Mensagem" id="message-text" ></textarea>
                     <a id="send-message"class="btn-send"><i class="fas fa-paper-plane"></i></a>
                 </div>
+
             </div>
         </div>
     </div>    
@@ -96,7 +95,7 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
     src="https://code.jquery.com/jquery-3.5.0.min.js"
     integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
     crossorigin="anonymous"></script>
-
+    <script type="text/javascript" src="scripts/axios.min.js"></script>
     <script type="text/javascript" src="scripts/index.js"></script>
     <script type="text/javascript" src="scripts/socket.js"></script>
     <script type="text/javascript" src="scripts/menu.js"></script>

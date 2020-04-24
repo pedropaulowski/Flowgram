@@ -38,7 +38,14 @@ class Socket implements MessageComponentInterface {
                 $hora = date("Y-m-d H:i:s");
                 $id = $real_message['id'];
 
-                $this->clients[$id] = $this->clients[$from->resourceId];
+                $this->clients[$id] = $from;
+                $this->clients[$id]->resourceId = $id;
+                if($from == $this->clients[$id]) {
+                    echo "Iguais\n";
+                }
+                echo "New connection! ({$from->resourceId})\n";
+                echo "New connection! (".$this->clients[$id]->resourceId.")\n";
+                
                 $this->usuarioDb->ficarOnline($id);
                 $this->usuarioDb->setUltimoAcesso($id, $hora);
 
@@ -101,9 +108,13 @@ class Socket implements MessageComponentInterface {
             case 'disconnect':
                 $hora = date("Y-m-d H:i:s");
                 $id = $real_message['id'];
-                $this->clients[$from->resourceId] = '';
                 $this->usuarioDb->ficarOffline($id);
                 $this->usuarioDb->setUltimoAcesso($id, $hora);
+                // var_dump(isset($this->clients[$id]));
+
+                unset($this->clients[$id]);
+
+                // var_dump($this->clients[$id]);
 
             break;
 
@@ -216,6 +227,8 @@ class Socket implements MessageComponentInterface {
 
                 $mensagens = $this->mensagemDb->get20PorConversaPagination($destinatario, $remetente, $pagina);
 
+                $estado_user = $this->usuarioDb->getEstado($remetente);
+                // var_dump($estado_user);
                 if(count($mensagens) > 0) {
                     foreach($mensagens as $mensagem) {
                         $msg_metadata = json_decode($mensagem['msg'], true);
@@ -235,7 +248,6 @@ class Socket implements MessageComponentInterface {
                         
 
 
-                        $estado_user = $this->usuarioDb->getEstado($mensagem['remetente']);
 
                         if($mensagem['remetente'] != $destinatario) {
                             $this->mensagemDb->lerMensagem($mensagem['id']);
@@ -319,7 +331,12 @@ class Socket implements MessageComponentInterface {
     public function onClose(ConnectionInterface $conn) {
         $key = array_search($conn, $this->clients);
         if ($key) {
+            $hora = date("Y-m-d H:i:s");
+            $this->clients[$key]->close();
             unset($this->clients[$key]);
+            // var_dump($this->clients[$key]);
+            $this->usuarioDb->ficarOffline($key);
+            $this->usuarioDb->setUltimoAcesso($key, $hora);
         }
     }
 
@@ -329,6 +346,11 @@ class Socket implements MessageComponentInterface {
     public function msgToUser($id, $msg) {
         
             $this->clients[$id]->send($msg);
-        
     }
+
+    public function unsetOne(ConnectionInterface $conn) {
+        unset($conn);
+        var_dump($conn);
+    }
+
 }

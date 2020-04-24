@@ -1,9 +1,9 @@
 <?php
 
-$host = 'remotemysql.com';
-$dbname = 'hKbfHbty3s';
-$dbuser = 'hKbfHbty3s';
-$dbpwd = 'HJJESWjZAc';
+$host = 'localhost';
+$dbname = 'flowgram';
+$dbuser = 'root';
+$dbpwd = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $dbuser, $dbpwd);

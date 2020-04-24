@@ -323,8 +323,10 @@ body{
 }
 
 .dropdown-menu {
+    margin-top: 39px;
     width: 100%;
-    max-width: 270px;
+    max-width: 340px;
+    min-width: 320px;
     background-color: #161616;
     position: absolute;
     display: none;
@@ -334,10 +336,15 @@ body{
 
 }
 .menu-options {
+    /* width: 37%; */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+    color: white;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+
 }
 
 .menu-options div {
@@ -352,4 +359,79 @@ body{
 }
 .menu-options div:hover {
     background-color: black;
+}
+
+i {
+    margin: 0px 10px;
+}
+
+.f-100 {
+    font-size: 100px;
+}
+.security {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.article {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    word-break: break-word;
+    justify-content: space-between;
+}
+.article .text-article {
+    max-width: 70%;
+}
+.article a{
+    color: black;
+}
+.dados-conta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-profile {
+    height: auto;
+    border: none;
+    border-bottom: 2px solid black;
+    background-color: #D6D6D6;
+    font-size: 18px;
+    vertical-align: text-bottom;
+}
+.profile div {
+    margin-bottom: 30px;
+    margin-top: 5px;
+
+}
+.profile a {
+    margin: 5px 0px;
+}
+#editar {
+    font-size: 20px;
+    cursor: pointer;
+}
+#editar:hover{
+    text-decoration-line: underline;    
+}
+
+
+.profile-img-circle {
+    width: 200px;
+    height: 200px;
+    min-height: 50px;
+    border-radius: 50%;
+    margin: 3px;
+    border: 1px solid black;
+    overflow: hidden;
+    
+}
+.img-my-profile {
+    width: 200px;
+    min-width: 200px;
+}
+
+#file-upload-button {
+    width: 50px;
 }

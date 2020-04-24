@@ -16,8 +16,7 @@ if(isset($_SESSION['id']) && !empty($_SESSION['id'])) {
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <title>Login - Flowgram</title>
     <link rel="stylesheet" href="styles/login.css">
-    <!-- <link rel="stylesheet" href="fontawesome/css/all.css"> -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="fontawesome/css/all.css">
 </head>
 <body>
     <div class="container">
@@ -62,7 +61,6 @@ if(isset($_SESSION['id']) && !empty($_SESSION['id'])) {
   crossorigin="anonymous"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script type="text/javascript" src="scripts/login.js"></script>
-
 
 </body>
 </html>
