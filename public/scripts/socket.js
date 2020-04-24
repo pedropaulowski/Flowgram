@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://flowgram.test:8080")
+const socket = new WebSocket("ws://13.82.208.202:8080")
 const my_id = localStorage.getItem('id')
 const secret_key = localStorage.getItem('chave')
 var aux = 0
