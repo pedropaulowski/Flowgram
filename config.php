@@ -1,6 +1,6 @@
 <?php
 
-$host = 'http://13.82.208.202/';
+$host = '13.82.208.202';
 $dbname = 'flowgram';
 $dbuser = 'root';
 $dbpwd = 'UZUMymw123j6t2hybt26';
