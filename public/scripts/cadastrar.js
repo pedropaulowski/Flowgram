@@ -41,11 +41,26 @@ $(document).ready(function() {
                 var chave = json.chave_privada
                 localStorage.setItem('chave', chave)
                 localStorage.setItem('id', json.id)
-                window.location.href="index.php"
-
+                document.getElementById('chave-privada').style.display = 'flex';
+                document.getElementById('chave-input').value = chave;
             } 
           })
 
     })
 
 })
+
+function copiarChave() {
+    /* Get the text field */
+    var copyText = document.getElementById("chave-input");
+  
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+  
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+ 
+    window.location.href="index.php"
+    
+}

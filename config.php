@@ -2,8 +2,8 @@
 
 $host = 'localhost';
 $dbname = 'flowgram';
-$dbuser = 'paulowski';
-$dbpwd = 'xr2$gpdL#jC)uQ?';
+$dbuser = 'root';
+$dbpwd = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $dbuser, $dbpwd);

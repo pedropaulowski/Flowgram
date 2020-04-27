@@ -56,19 +56,39 @@ for(let i in btns_menu) {
             case 'security':
                 var html = createSecurity();
                 document.getElementById('content-chat').innerHTML = html
+                textarea.style.display = 'none'
             break;
             case 'dados':
                 var html = createDadosConta();
                 document.getElementById('content-chat').innerHTML = html
+                textarea.style.display = 'none'
+
             break;
             case 'estatisticas':
                 var html = createEstatistica();
                 document.getElementById('content-chat').innerHTML = html
+                textarea.style.display = 'none'
                 // fazer uma req axas pra buscar as estatisticas
             break;
             case 'perfil':
-                var html = createPerfil()
-                document.getElementById('content-chat').innerHTML = html
+                textarea.style.display = 'none'
+
+                var perfil;
+
+                axios.get('/api/usuarios/', {
+                    params: {
+                        id_usuario: my_id,
+                    }
+                })
+                .then(function (response) {
+                    var json = response.data
+                    if(json.nome != null && json.nome != undefined) {
+                        perfil = json;             
+                        var html = createPerfil(perfil.img_url, perfil.username, perfil.nome, perfil.descricao)
+                        document.getElementById('content-chat').innerHTML = html
+                    } 
+                })
+
             break;
         }
     }
@@ -156,3 +176,72 @@ function criarCardEstatistica(img_url, username, qtd_msg) {
 
     return html_card
 }
+
+function createPerfil(img_url, username, name, description) {
+    var html = `                
+    <div class="profile">
+        <form id="form-edit" method="POST" enctype="multipart/form-data">
+            <div  class="profile-img-circle">
+                <img id="open-img-input"class="img-my-profile" src="${img_url}" alt="">
+            </div>
+            <div class="edit-username">
+                <input type="file" name="file" class="input-profile" id="file"/>
+            </div>
+            <a>Username:</a>
+            <div class="edit-username">
+                <input autocomplete="off" name="username" type="text" class="input-profile" value="${username}"id="username-text"/>
+            </div>
+            <a>Nome:</a>
+            <div class="edit-name">
+                <input autocomplete="off" name="name" type="text" class="input-profile"  value="${name}"id="name-text"/>
+            </div>
+            <a>Recado:</a>
+            <div class="edit-descripton">
+                <textarea autocomplete="off" name="description" id="description-profile" >${description}</textarea>
+            </div>
+            
+            <button type="submit" id="editar"><i class="fas fa-save"></i></button>
+
+        </form>
+    </div>`;
+
+    $(function(){
+        $('#form-edit').on('submit', function(e) {
+            e.preventDefault();
+
+            var form = document.getElementById('form-edit')
+            var formData = new FormData(form)
+
+            $.ajax({
+                type: 'POST',
+                url:'/api/editprofile/',
+                contentType:false,
+                data: formData,
+                processData:false,
+                success:function(response) {
+                    var json = JSON.parse(response)           
+                    document.getElementById('content-chat').innerHTML = ''
+                    console.log(json)
+                    var html = createPerfil(json.img_url, json.username, json.nome, json.descricao)
+                    document.getElementById('content-chat').innerHTML = html
+                }
+            })
+        })
+    })
+
+
+    return html
+}
+
+
+function conversas() {
+    if(document.getElementById('chats-list').style.display == 'none' || document.getElementById('chats-list').style.display == '')   
+        document.getElementById('chats-list').style.display = 'block'
+    else 
+        document.getElementById('chats-list').style.display = 'none'
+
+}
+
+
+
+

@@ -13,7 +13,7 @@ class UsuarioMySql implements UsuarioDao {
     }
 
     public function add(\Classes\Usuario $u) {
-        if($this->existeUsername($u->getUsername()) == false) {
+        if($this->existeUsername($u->getUsername()) == false && $this->specialCharacters($u->getUsername()) == false) {
             $sql = "INSERT INTO usuarios (
                 id_user,
                 username,
@@ -235,5 +235,63 @@ class UsuarioMySql implements UsuarioDao {
         }
     }
 
+    public function getUserToEditById($id) {
+        $sql = "SELECT * FROM usuarios WHERE id_user = :id";
+        $sql = $this->pdo->prepare($sql);
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+
+        if($sql->rowCount() > 0) {
+            $sql = $sql->fetch(PDO::FETCH_ASSOC);
+            $usuario = [
+                'username' => htmlspecialchars($sql['username'], ENT_QUOTES),
+                'img_url' => $sql['img_url'],
+                'nome' => htmlspecialchars($sql['nome'], ENT_QUOTES),
+                'descricao' => htmlspecialchars($sql['descricao'], ENT_QUOTES)
+            ];
+
+            return $usuario;
+        } else {
+            return false;
+        }
+    }
+
+    public function editUser($id, $img_url, $username, $nome, $descricao) {
+        if($this->specialCharacters($username) == false) {
+            if($img_url != "") {
+                $sql = "UPDATE usuarios SET img_url = :img_url, username = :username, nome = :nome, descricao = :descricao WHERE id_user = :id";
+                $sql = $this->pdo->prepare($sql);
+                $sql->bindValue(":img_url" , $img_url);
+                $sql->bindValue(":username" , $username);
+                $sql->bindValue(":nome" , $nome);
+                $sql->bindValue(":descricao" , $descricao);
+                $sql->bindValue(":id" , $id);
+                $sql->execute();
+
+            } else {         
+                $sql = "UPDATE usuarios SET username = :username, nome = :nome, descricao = :descricao WHERE id_user = :id";
+                $sql = $this->pdo->prepare($sql);
+                $sql->bindValue(":id" , $id);
+                $sql->bindValue(":username" , $username);
+                $sql->bindValue(":nome" , $nome);
+                $sql->bindValue(":descricao" , $descricao);
+                $sql->execute();
+
+            }
+        }
+    }
+
+    private function specialCharacters($string) {
+        $length = strlen($string);
+        $string = strtolower($string);
+        for($i = 0; $i < $length; $i++) {
+            if(($string[$i] >= 'a' && $string[$i] <= 'z') ||($string[$i] == '_' ||$string[$i] == '.'))
+                continue;
+            else 
+                return true;
+        }
     
+        return false;
+    }
+
 }

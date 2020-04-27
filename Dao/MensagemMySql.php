@@ -276,4 +276,21 @@ class MensagemMySql implements MensagemDao {
         $sql->execute();
 
     }
+
+    public function todasPorConversaAsc($usuario1, $usuario2) {
+        $sql = "SELECT * FROM mensagens WHERE 
+        (remetente = :usuario1 AND destinatario = :usuario2) OR
+        (remetente = :usuario2 AND destinatario = :usuario1) ORDER BY hora ASC";
+        $sql = $this->pdo->prepare($sql);
+        $sql->bindValue(":usuario1", $usuario1);
+        $sql->bindValue(":usuario2", $usuario2);
+        
+        $sql->execute();
+
+        if($sql->rowCount() > 0) {
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return [];
+        }
+    }
 }

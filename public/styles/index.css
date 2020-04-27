@@ -12,12 +12,14 @@ body{
     border: 1px solid black;
     margin-top: 5%;
     height: 80vh;
+    /* flex-wrap: wrap; */
 
 }
 
 .chats {
     width: 38%;
     display: flex;
+    min-width: 266px;
     flex-direction: column;
     border: 1px solid black;
     height: 80vh;
@@ -399,6 +401,7 @@ i {
     background-color: #D6D6D6;
     font-size: 18px;
     vertical-align: text-bottom;
+    width: -webkit-fill-available;
 }
 .profile div {
     margin-bottom: 30px;
@@ -425,6 +428,7 @@ i {
     margin: 3px;
     border: 1px solid black;
     overflow: hidden;
+    align-self: center;
     
 }
 .img-my-profile {
@@ -435,3 +439,154 @@ i {
 #file-upload-button {
     width: 50px;
 }
+
+#description-profile{
+    overflow-y: scroll;
+    word-break: break-all;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    resize: vertical;
+    max-height: 150px;
+    font-size: 17px;
+
+}
+
+#form-edit{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+#handle-chats-list{
+    display: none;
+}
+
+.emoji-menu {
+    display: none;
+    height: 200px;
+    border: 1px solid black;
+    position: relative;
+    width: 75%;
+    background-color: white;
+    margin: 5px;
+    border-radius: 3px;
+}
+
+.emoji-header {
+    overflow-x: scroll;
+}
+
+.emoji-content {
+    overflow-y: scroll;
+    height: 160px;
+    word-break: break-word;
+}
+.emoji-title {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+
+
+
+@media (max-width: 700px) { 
+    .container-flex {
+        flex-wrap: wrap;
+        height: 635px;
+        width: 97%;    
+    }
+    .chats {
+        width: 100%;
+        height: fit-content;
+        border: none;
+    }   
+    .chat {
+        width: 100%;
+        margin-top: 25px;
+        height: 500px;
+        border-bottom: 1px solid black;
+    }
+    #content-chat::-webkit-scrollbar {
+        display: none;
+    }
+    #chats-list {
+        display: none;
+        height: 300px
+    }
+
+    .content-chat {
+        min-height: 240px;
+        height: 100%;
+        max-height: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Arial, Helvetica, sans-serif;
+        color: black;
+        font-size: 16px;
+        overflow-y: scroll;
+    }
+    #handle-chats-list{
+        width: 100%;
+        margin: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .profile {
+        width: 90%;
+    }
+    .message-me-date {
+        font-size: 14px;
+        opacity: 0.8;
+        /* margin: 5px; */
+        align-self: flex-end;
+    }
+    .card-message-other {
+        background-color: white;
+        margin: 5px;
+        max-width: 310px;
+        width: 70%;
+        align-self: flex-start;
+        border-radius: 4px;
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+        word-break: break-word;
+    }
+
+    .card-message-me {
+        background-color: #FFFFD4;
+        margin: 5px;
+        max-width: 310px;
+        width: 70%;
+        align-self: flex-end;
+        border-radius: 4px;
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+        word-break: break-word;
+    }
+
+    .message-me-text {
+        margin: 3px;
+    }
+
+    .message-other-text {
+        margin: 3px;
+    }
+    .message-other-date{
+        margin-bottom: 2px;
+        margin-right: 2px;
+    }
+    .message-me-date{
+        margin-bottom: 2px;
+        margin-right: 2px;
+    }
+    .emoji-menu {
+        display: none;
+    }
+    #btn-emoji {
+        display: none;
+    }
+ }

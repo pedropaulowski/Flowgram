@@ -112,7 +112,7 @@ switch($method) {
                         $usuario->setEstado(1);
                         $usuario->setNome($nome);
                         $usuario->setChavePublica($chave_publica);
-                        $usuario->setImgUrl('http://flowgram.test/profiles/usuario/profile.jpg');
+                        $usuario->setImgUrl('/profiles/usuario/profile.jpg');
                         $usuario->setCreatedAt($hora);
                         $usuario->setDescricao("Hey there, i'm using Flowgram!");
                         
@@ -139,14 +139,11 @@ switch($method) {
     break;
 
     case 'GET':
-        $parametros = (json_decode(file_get_contents("php://input"), true));
-        /**
-         * Parametro opcional "id_usuario"
-         */
-        if(isset($parametros['id_usuario']))
-            echo json_encode($usuarioDb->getUserById($parametros['id_usuario']));
+
+        if(isset($_GET['id_usuario']))
+            echo json_encode($usuarioDb->getUserToEditById($_GET['id_usuario']), true);
         else
-            
+            echo json_encode($error_array);
     break;
 
     default:

@@ -74,11 +74,11 @@ class Socket implements MessageComponentInterface {
 
                     $ky_destinatario_remetente = sodium_crypto_box_keypair_from_secretkey_and_publickey($des, $res);
     
-
+                    // var_dump(sodium_crypto_box_keypair_from_secretkey_and_publickey($des, $res));
                     $mensagem_descriptografada = sodium_crypto_box_open(
                         $msg_text,
                         $nonce,
-                        $ky_destinatario_remetente,
+                        $ky_destinatario_remetente
                     );
             
                     $msg_metadata['msg'] = $mensagem_descriptografada;
@@ -193,8 +193,9 @@ class Socket implements MessageComponentInterface {
                 $mensagem_descriptografada = sodium_crypto_box_open(
                     $msg_text,
                     $nonce,
-                    $ky_destinatario_remetente,
+                    $ky_destinatario_remetente
                 );
+
                 $query = $this->usuarioDb->getUserById($remetente);
                 $username = $query['username'];
                 $msg_metadata['msg'] = htmlspecialchars($mensagem_descriptografada, ENT_QUOTES);
@@ -241,7 +242,7 @@ class Socket implements MessageComponentInterface {
                         $mensagem_descriptografada = sodium_crypto_box_open(
                             $msg_text,
                             $nonce,
-                            $ky_destinatario_remetente,
+                            $ky_destinatario_remetente
                         );
 
                         $msg_metadata['msg'] = htmlspecialchars($mensagem_descriptografada, ENT_QUOTES);
@@ -350,7 +351,7 @@ class Socket implements MessageComponentInterface {
 
     public function unsetOne(ConnectionInterface $conn) {
         unset($conn);
-        var_dump($conn);
+        // var_dump($conn);
     }
 
 }

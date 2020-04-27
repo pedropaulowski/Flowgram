@@ -1,8 +1,13 @@
-const socket = new WebSocket("ws://13.82.208.202:8080")
+const socket = new WebSocket("ws://192.168.1.5:8080")
 const my_id = localStorage.getItem('id')
 const secret_key = localStorage.getItem('chave')
 var aux = 0
+var textarea = document.getElementsByClassName('message-bar')[0]
+textarea.style.display = 'none'
 
+var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+
+console.log(width);
 
 socket.onopen = () =>{
     var msg = {
@@ -108,8 +113,15 @@ socket.onmessage = (e) => {
         
                             document.getElementById('chat-username').setAttribute('id_user', socket_msg.from)
                             $('#username-status').innerHTML = socket_msg.estado_user
-        
-        
+                            
+                            document.getElementById("export-chat").setAttribute('href', `api/exportchat/?chave_privada=${secret_key}&&id=${socket_msg.from}`)
+                            document.getElementById("export-chat").setAttribute('download', `Conversas-de-${my_id}-com-${socket_msg.from}`)
+
+                            if(width < 700)
+                                document.getElementById('chats-list').style.display = 'none'
+                            
+                            textarea.style.display = 'flex'
+
                             setTimeout(barra, 1000);
                         }
                     })
@@ -140,9 +152,18 @@ socket.onmessage = (e) => {
                             
                             document.getElementById('chat-username').innerText = socket_msg.username
         
-                                document.getElementById('chat-username').setAttribute('id_user', socket_msg.from)
-                                $('#username-status').innerHTML = socket_msg.user_estado
-        
+                            document.getElementById('chat-username').setAttribute('id_user', socket_msg.from)
+                            $('#username-status').innerHTML = socket_msg.user_estado
+
+                            
+                            document.getElementById("export-chat").setAttribute('href', `api/exportchat/?id=${socket_msg.from}&&chave_privada=${secret_key}`)
+                            document.getElementById("export-chat").setAttribute('download', `Conversas-de-${my_id}-com-${socket_msg.from}`)
+                            
+                            if(width < 700)
+                                document.getElementById('chats-list').style.display = 'none'
+
+                            textarea.style.display = 'flex'
+
         
                             setTimeout(barra, 1000);
                         }
@@ -187,10 +208,19 @@ socket.onmessage = (e) => {
                     
                     document.getElementById('chat-username').innerText = socket_msg.username
 
-                        document.getElementById('chat-username').setAttribute('id_user', socket_msg.id_user)
-                        $('#username-status').innerHTML = socket_msg.user_estado
+                    document.getElementById('chat-username').setAttribute('id_user', socket_msg.id_user)
+                    $('#username-status').innerHTML = socket_msg.user_estado
+                    
+                    
+                    document.getElementById("export-chat").setAttribute('href', `api/exportchat/?id=${socket_msg.id_user}&&chave_privada=${secret_key}`)
+                    document.getElementById("export-chat").setAttribute('download', `Conversas-de-${my_id}-com-${socket_msg.id_user}`)
 
+                    if(width < 700)
+                        document.getElementById('chats-list').style.display = 'none'
 
+                    textarea.style.display = 'flex'
+
+                    
                     setTimeout(barra, 1000);
                 }
             })
@@ -237,6 +267,13 @@ socket.onmessage = (e) => {
                         document.getElementById('chat-username').setAttribute('id_user', socket_msg.id_user)
                         $('#username-status').innerHTML = socket_msg.user_estado
 
+                        document.getElementById("export-chat").setAttribute('href', `api/exportchat/?id=${socket_msg.id_user}&&chave_privada=${secret_key}`)
+                        document.getElementById("export-chat").setAttribute('download', `Conversas-de-${my_id}-com-${socket_msg.id_user}`)
+                        
+                        if(width < 700)
+                            document.getElementById('chats-list').style.display = 'none'
+
+                        textarea.style.display = 'flex'
 
                         setTimeout(barra, 1000);
                     }
@@ -454,3 +491,5 @@ function searchChatByUsername(username) {
 function encodeHTML(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 }
+
+

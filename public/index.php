@@ -15,7 +15,8 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <title>Flowgram</title>
     <link rel="stylesheet" href="styles/index.css">
-    <!-- <link rel="stylesheet" href="fontawesome/css/all.css">  -->
+    <link rel="stylesheet" href="fontawesome/css/all.css"> 
+
 </head>
 <body>
     <div class="container-flex ">
@@ -44,61 +45,57 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
             <div id="chats-list" class="chats-list">
 
             </div>
+            <div onclick="conversas()" id="handle-chats-list">
+                <a>Ocultar/Mostrar Conversas<i class="fas fa-caret-down"></i></a>
+            </div>
         </div>
 
         <div class="chat">
             <div class="header-chat">
-                <a id="chat-username" user="id_user" class="chat-username"></a>
-                <a id="username-status" class="username-status"></a>
+                    <a id="chat-username" user="id_user" class="chat-username"></a>
+                    <a id="username-status" class="username-status"></a>
+
             </div>
             <div id="content-chat" class="content-chat">
-                <div class="profile">
-                    <form id="form-edit"method="POST" enctype="multipart/form-data">
-                        <div  class="profile-img-circle">
-                            <img id="open-img-input"class="img-my-profile" src="http://flowgram.test/profiles/usuario/profile.jpg" alt="">
-                        </div>
-                        <div class="edit-username">
-                            <input type="file" name="file" class="input-profile" id="file"/>
-                        </div>
-                        <a>Username:</a>
-                        <div class="edit-username">
-                            <input autocomplete="off" name="username" type="text" class="input-profile" value="${username}"id="username-text"/>
-                        </div>
-                        <a>Nome:</a>
-                        <div class="edit-name">
-                            <input autocomplete="off" name="name" type="text" class="input-profile"  value="${Name}"id="name-text"/>
-                        </div>
-                        <a>Recado:</a>
-                        <div class="edit-descripton">
-                            <input autocomplete="off" name="description" type="text" class="input-profile"  value="${Name}"id="description-text"/>
-                        </div>
-                        
-                        <button type="submit"id="editar"><i class="fas fa-save"></i></button>
 
-                    </form>
-                </div>
 
             </div>
-
             <div class="footer-chat">
+                <div id="emoji-menu" class="emoji-menu">
+                    <div id="emoji-header" class="emoji-header">
+
+                    </div>
+                    <div id="emoji-content" class="emoji-content">
+
+                    </div>
+
+                </div>
                 <div class="message-bar">
                     <textarea type="text" placeholder="Mensagem" id="message-text" ></textarea>
                     <a id="send-message"class="btn-send"><i class="fas fa-paper-plane"></i></a>
+                    <a id="btn-emoji" onclick="emojiArea()" class="btn-send" ><i class="far fa-surprise"></i></a>
+                    <a target="_blank" id="export-chat" class="btn-send"><i class="fas fa-download"></i></a>
                 </div>
+
 
             </div>
         </div>
+
     </div>    
     
     <script
     src="https://code.jquery.com/jquery-3.5.0.min.js"
     integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
     crossorigin="anonymous"></script>
-    <script type="text/javascript" src="scripts/axios.min.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="scripts/index.js"></script>
     <script type="text/javascript" src="scripts/socket.js"></script>
     <script type="text/javascript" src="scripts/menu.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <script type="text/javascript" src="scripts/emojis.js"></script>
 
 
 

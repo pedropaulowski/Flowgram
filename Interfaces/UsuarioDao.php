@@ -11,6 +11,7 @@ interface UsuarioDao {
     public function delete($id);
     
     public function getUserById($id);
+    public function getUserToEditById($id);
     public function getUserByUsername($username);
     
     public function setUltimoAcesso($id, $ultimo_acesso);
@@ -25,5 +26,7 @@ interface UsuarioDao {
     public function ficarOffline($id);
 
     public function getEstado($id);
+
+    public function editUser($id, $img_url = 0, $username, $nome, $descricao);
 
 }
