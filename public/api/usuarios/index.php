@@ -111,7 +111,7 @@ switch($method) {
                         $usuario->setUltimoAcesso($hora);
                         $usuario->setEstado(1);
                         $usuario->setNome($nome);
-                        $usuario->setChavePublica($chave_publica);
+                        $usuario->setChavePublica(bin2hex($chave_publica));
                         $usuario->setImgUrl('/profiles/usuario/profile.jpg');
                         $usuario->setCreatedAt($hora);
                         $usuario->setDescricao("Hey there, i'm using Flowgram!");
@@ -129,7 +129,7 @@ switch($method) {
                 
                 echo json_encode($singup_success_array);
             } else {
-
+                var_dump($result);
                 echo json_encode($singup_error_array);
 
             }

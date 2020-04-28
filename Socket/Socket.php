@@ -2,6 +2,7 @@
 
 namespace Socket;
 
+use Classes\Criptografia;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 use Dao\UsuarioMySql;
@@ -16,10 +17,12 @@ class Socket implements MessageComponentInterface {
     private $clients = [];
     private $usuarioDb;
     private $mensagemDb;
+    private $criptografia;
 
     public function __construct(PDO $pdo) {
         $this->usuarioDb = new UsuarioMySql($pdo);
         $this->mensagemDb = new MensagemMySql($pdo);
+        $this->criptografia = new Criptografia;
     }
     public function onOpen(ConnectionInterface $conn) {
 
@@ -71,7 +74,7 @@ class Socket implements MessageComponentInterface {
                     $msg_text = hex2bin($msg_metadata['msg']);
                     $res = $user['chave_publica'];
                     $nonce = hex2bin($last_msg['nonce']);
-
+                    /*
                     $ky_destinatario_remetente = sodium_crypto_box_keypair_from_secretkey_and_publickey($des, $res);
     
                     // var_dump(sodium_crypto_box_keypair_from_secretkey_and_publickey($des, $res));
@@ -81,7 +84,9 @@ class Socket implements MessageComponentInterface {
                         $ky_destinatario_remetente
                     );
             
-                    $msg_metadata['msg'] = $mensagem_descriptografada;
+                    $msg_metadata['msg'] = $mensagem_descriptografada;*/
+
+                    $mensagem_descriptografada = $this->criptografia->descriptografarMensagem($msg_text, $des, hex2bin($res), $nonce);
 
 
                     $msg = [
@@ -129,16 +134,19 @@ class Socket implements MessageComponentInterface {
                 
                 if(isset($msg_metadata['msg']) && !empty($msg_metadata['msg'])) {
 
-                    $chave_publica_destinatario = $this->usuarioDb->getChavePublica($destinatario);
+                    $chave_publica_destinatario = hex2bin($this->usuarioDb->getChavePublica($destinatario));
                     $chave_privada_remetente = hex2bin($real_message['secret_key']);
-                    $ky_remetente_destinatario = sodium_crypto_box_keypair_from_secretkey_and_publickey($chave_privada_remetente, $chave_publica_destinatario);        
                     $nonce = random_bytes(SODIUM_CRYPTO_BOX_NONCEBYTES);
+
+                    /*$ky_remetente_destinatario = sodium_crypto_box_keypair_from_secretkey_and_publickey($chave_privada_remetente, hex2bin($chave_publica_destinatario));        
 
                     $mensagem_criptografada = sodium_crypto_box(
                         $msg_metadata['msg'],
                         $nonce,
                         $ky_remetente_destinatario
-                    );
+                    );*/
+
+                    $mensagem_criptografada = $this->criptografia->criptografarMensagem($msg_metadata['msg'], $chave_privada_remetente, $chave_publica_destinatario, $nonce);
 
                     $msg_metadata['msg'] = bin2hex($mensagem_criptografada);
                     $privacidade = $real_message['privacidade'];
@@ -186,7 +194,7 @@ class Socket implements MessageComponentInterface {
 
                 $des = $chave_privada;
                 $res = $this->usuarioDb->getChavePublica($remetente);
-
+                /*
                 $ky_destinatario_remetente = sodium_crypto_box_keypair_from_secretkey_and_publickey($des, $res);
 
 
@@ -194,7 +202,10 @@ class Socket implements MessageComponentInterface {
                     $msg_text,
                     $nonce,
                     $ky_destinatario_remetente
-                );
+                );*/
+
+                $mensagem_descriptografada = $this->criptografia->descriptografarMensagem($msg_text, $des, hex2bin($res), $nonce);
+
 
                 $query = $this->usuarioDb->getUserById($remetente);
                 $username = $query['username'];
@@ -222,7 +233,7 @@ class Socket implements MessageComponentInterface {
                 $pagina = $real_message['pagina'];
 
                 $chave_privada_destinatario = hex2bin($real_message['secret_key']);
-                $chave_publica_remetente = $this->usuarioDb->getChavePublica($remetente);
+                $chave_publica_remetente = hex2bin($this->usuarioDb->getChavePublica($remetente));
 
 
 
@@ -237,14 +248,16 @@ class Socket implements MessageComponentInterface {
                         // var_dump($mensagem['hora']);
 
                         $nonce = hex2bin($mensagem['nonce']);
-                        $ky_destinatario_remetente = sodium_crypto_box_keypair_from_secretkey_and_publickey($chave_privada_destinatario, $chave_publica_remetente);
+                        /*$ky_destinatario_remetente = sodium_crypto_box_keypair_from_secretkey_and_publickey($chave_privada_destinatario, $chave_publica_remetente);
         
                         $mensagem_descriptografada = sodium_crypto_box_open(
                             $msg_text,
                             $nonce,
                             $ky_destinatario_remetente
                         );
-
+                        */
+                        $mensagem_descriptografada = $this->criptografia->descriptografarMensagem($msg_text, $chave_privada_destinatario, $chave_publica_remetente, $nonce);
+                        // var_dump($mensagem_descriptografada);
                         $msg_metadata['msg'] = htmlspecialchars($mensagem_descriptografada, ENT_QUOTES);
                         
 

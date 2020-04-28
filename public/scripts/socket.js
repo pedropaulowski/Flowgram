@@ -1,4 +1,6 @@
-const socket = new WebSocket("ws://192.168.1.5:8080")
+// const socket = new WebSocket("wss://3000-ba2d375f-e94b-42e9-afc7-e7ec6a6b161f.ws-us02.gitpod.io")
+const socket = new WebSocket("ws://192.168.1.16:8080")
+
 const my_id = localStorage.getItem('id')
 const secret_key = localStorage.getItem('chave')
 var aux = 0
