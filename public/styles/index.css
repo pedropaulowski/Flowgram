@@ -105,10 +105,11 @@ body{
     overflow: hidden;
     cursor: pointer;
     transition: 300ms;
+    background-color: white;
 }
 
 .chat-card:hover {
-    background-color: #F9F9F9;
+    /* background-color: #F9F9F9; */
 }
 
 .chat-img-circle {
@@ -487,7 +488,9 @@ i {
 }
 
 
-
+#estatisticas {
+    flex-direction: column;
+}
 
 @media (max-width: 700px) { 
     .container-flex {

@@ -25,4 +25,6 @@ interface MensagemDao {
     public function criarChat($usuario1, $usuario2);
 
     public function todasPorConversaAsc($id, $id_destinatario);
+    public function countTodasPorConversa($usuario1, $usuario2);
+
 }

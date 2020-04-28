@@ -89,6 +89,7 @@ function mostrarEmojis(nome_array) {
 
 function adicionarEmojiTexto(emoji) {
     document.getElementById('message-text').value += emoji
+
 }
 
 function emojiArea() {
@@ -99,6 +100,9 @@ function emojiArea() {
         } else {
             document.getElementById("emoji-menu").style.display = "none"
         }
+
+
+
     }
 }
 

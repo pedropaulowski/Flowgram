@@ -36,7 +36,7 @@ if(!isset($_SESSION['id']) || empty($_SESSION['id'])) {
                 <div class="menu-options">
                     <div><a data-toggle="security" class="btn-menu"><i class="fas fa-lock"></i>Segurança</a></div>
                     <div><a data-toggle="dados" class="btn-menu"><i class="fas fa-database"></i>Solicitar dados da conta</a></div>
-                    <div><a data-toggle="estatistica" class="btn-menu"><i class="fas fa-chart-pie"></i>Estatísticas</a></div>
+                    <div><a data-toggle="estatisticas" class="btn-menu"><i class="fas fa-chart-pie"></i>Estatísticas</a></div>
                     <div><a data-toggle="perfil" class="btn-menu"><i class="fas fa-user-alt"></i>Meu perfil</a></div>
                     <div id="log-out"><a><i class="fas fa-sign-out-alt"></i>Sair</a></div>
                 </div>

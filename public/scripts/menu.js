@@ -67,12 +67,25 @@ for(let i in btns_menu) {
             case 'estatisticas':
                 var html = createEstatistica();
                 document.getElementById('content-chat').innerHTML = html
+                console.log(html);
                 textarea.style.display = 'none'
-                // fazer uma req axas pra buscar as estatisticas
+                axios({
+                    method: 'post',
+                    url: '/api/total'
+                })
+                .then(function (response) {
+                    var json = response.data
+
+                    for(var i in json) {
+                        var html = criarCardEstatistica(json[i].img_url, json[i].usuario, json[i].total);
+                        $("#estatisticas").append(html);
+                    }
+
+                });
+
             break;
             case 'perfil':
                 textarea.style.display = 'none'
-
                 var perfil;
 
                 axios.get('/api/usuarios/', {
@@ -128,7 +141,7 @@ function createDadosConta() {
         <h2>Solicitar dados da conta</h2>
         <h3><i class="fas fa-file-alt f-100"></i></h3>
         <div class="article">
-            <div><a href="relatorio.php"><i class="fas fa-file-alt "></i>Gerar relatório</a></div>
+            <div><a href="api/relatorio" download="relatorio do flowgram" ><i class="fas fa-file-alt "></i>Gerar relatório</a></div>
             <div class="text-article">
                 Crie um relatório com os dados de sua conta do Flowgram, 
                 o qual contém todos os dados que estão guardados em nossos servidores sobre o seu usuário, exceto as mensagens.
@@ -149,8 +162,7 @@ function createEstatistica() {
             <div id="estatisticas"class="article">
   
             </div>
-        </div>
-    `
+        </div>`
     return html_estatistica
 }
 
